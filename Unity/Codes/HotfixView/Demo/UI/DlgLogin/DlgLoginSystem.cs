@@ -12,7 +12,7 @@ namespace ET
 
 		public static void RegisterUIEvent(this DlgLogin self)
 		{
-			self.View.E_LoginButton.AddListener(() => { self.OnLoginClickHandler();});
+			self.View.E_LoginButton.AddListenerAsync(() => { return self.OnLoginClickHandler();});
 		}
 
 		public static void ShowWindow(this DlgLogin self, Entity contextData = null)
@@ -20,13 +20,36 @@ namespace ET
 			
 		}
 		
-		public static void OnLoginClickHandler(this DlgLogin self)
+		public static async ETTask OnLoginClickHandler(this DlgLogin self)
 		{
-			LoginHelper.Login(
-				self.DomainScene(), 
-				ConstValue.LoginAddress, 
-				self.View.E_AccountInputField.GetComponent<InputField>().text, 
-				self.View.E_PasswordInputField.GetComponent<InputField>().text).Coroutine();
+			try
+			{
+				int errorCode =  await LoginHelper.Login(
+															self.DomainScene(), 
+															ConstValue.LoginAddress, 
+															self.View.E_AccountInputField.text, 
+															self.View.E_PasswordInputField.text);
+				if (errorCode != ErrorCode.ERR_Success)
+				{
+					Log.Error(errorCode.ToString());
+					return;
+				}
+
+
+				errorCode = await LoginHelper.GetServerInfos(self.ZoneScene());
+				if (errorCode != ErrorCode.ERR_Success)
+				{
+					Log.Error(errorCode.ToString());
+					return;
+				}
+
+				self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_Login);
+				self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_Server);
+			}
+			catch (Exception e)
+			{
+				Log.Error(e.ToString());
+			}
 		}
 		
 		public static void HideWindow(this DlgLogin self)
