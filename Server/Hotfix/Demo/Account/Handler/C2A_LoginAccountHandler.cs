@@ -17,15 +17,16 @@ namespace ET
 
             if (session.GetComponent<SessionLockingComponent>() != null)
             {
+                // 反复多次请求
                 response.Error = ErrorCode.ERR_RequestRepeatedly;
                 reply();
                 session.Disconnect().Coroutine();
                 return;
             }
             
-
             if (string.IsNullOrEmpty(request.AccountName) || string.IsNullOrEmpty(request.Password))
             {
+                // 账号密码不能为空
                 response.Error = ErrorCode.ERR_LoginInfoIsNull;
                 reply();
                 session.Disconnect().Coroutine();
@@ -34,6 +35,7 @@ namespace ET
 
             if (!Regex.IsMatch(request.AccountName.Trim(),@"^(?=.*[0-9].*)(?=.*[A-Z].*)(?=.*[a-z].*).{6,15}$"))
             {
+                // 名称要符合规则
                 response.Error = ErrorCode.ERR_AccountNameFormError;
                 reply();
                 session.Disconnect().Coroutine();
@@ -42,6 +44,7 @@ namespace ET
    
             if (!Regex.IsMatch(request.Password.Trim(),@"^[A-Za-z0-9]+$"))
             {
+                // 密码要符合规则
                 response.Error = ErrorCode.ERR_PasswordFormError;
                 reply();
                 session.Disconnect().Coroutine();
@@ -50,6 +53,7 @@ namespace ET
 
             using (session.AddComponent<SessionLockingComponent>())
             {
+                //CoroutineLockType.LoginAccount 携程锁
                 using (await CoroutineLockComponent.Instance.Wait(CoroutineLockType.LoginAccount,request.AccountName.Trim().GetHashCode()))
                 {
                     var accountInfoList = await DBManagerComponent.Instance.GetZoneDB(session.DomainZone()).Query<Account>(d=>d.AccountName.Equals(request.AccountName.Trim()));
@@ -60,16 +64,17 @@ namespace ET
                         session.AddChild(account);
                         if (account.AccountType == (int)AccountType.BlackList)
                         {
+                            // 账号黑名单
                             response.Error = ErrorCode.ERR_AccountInBlackListError;
                             reply();
                             session.Disconnect().Coroutine();
                             account?.Dispose();
                             return;
                         }
-
-
+                        
                         if (!account.Password.Equals(request.Password))
                         {
+                            // 密码错误
                             response.Error = ErrorCode.ERR_LoginPasswordError;
                             reply();
                             session.Disconnect().Coroutine();
@@ -79,6 +84,7 @@ namespace ET
                     }
                     else
                     {
+                        // 正常登录  添加账号信息 并存入数据库
                         account             = session.AddChild<Account>();
                         account.AccountName = request.AccountName.Trim();
                         account.Password    = request.Password;
@@ -89,10 +95,12 @@ namespace ET
 
                     StartSceneConfig startSceneConfig = StartSceneConfigCategory.Instance.GetBySceneName(session.DomainZone(), "LoginCenter");
                     long loginCenterInstanceId = startSceneConfig.InstanceId;
+                    // 登录中心服 请求登录 查证是否在线  如果在线就踢玩家下线
                     var loginAccountResponse  = (L2A_LoginAccountResponse) await ActorMessageSenderComponent.Instance.Call(loginCenterInstanceId,new A2L_LoginAccountRequest(){AccountId = account.Id});
 
                     if (loginAccountResponse.Error != ErrorCode.ERR_Success)
                     {
+                        // 账号在线
                         response.Error = loginAccountResponse.Error;
 
                         reply();
@@ -100,11 +108,13 @@ namespace ET
                         account?.Dispose();
                         return;
                     }
-                    
+                    // 其他登录者  发送断开链接
                     long accountSessionInstanceId = session.DomainScene().GetComponent<AccountSessionsComponent>().Get(account.Id);
                     Session otherSession   = Game.EventSystem.Get(accountSessionInstanceId) as Session;
                     otherSession?.Send(new A2C_Disconnect(){Error = 0});
                     otherSession?.Disconnect().Coroutine();
+                    
+                    // 登录成功
                     session.DomainScene().GetComponent<AccountSessionsComponent>().Add(account.Id,session.InstanceId);
                     session.AddComponent<AccountCheckOutTimeComponent, long>(account.Id);
 

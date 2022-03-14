@@ -5,6 +5,9 @@ namespace ET
 {
     public static class LoginHelper
     {
+        /// <summary>
+        /// 账号登录
+        /// </summary>
         public static async ETTask<int> Login(Scene zoneScene, string address, string account, string password)
         {
             A2C_LoginAccount a2CLoginAccount = null;
@@ -39,9 +42,7 @@ namespace ET
             
             return ErrorCode.ERR_Success;
         }
-
-
-
+        
         public static async ETTask<int> GetServerInfos(Scene zoneScene)
         {
             A2C_GetServerInfos a2CGetServerInfos = null;
@@ -183,8 +184,7 @@ namespace ET
             await ETTask.CompletedTask;
             return ErrorCode.ERR_Success;
         }
-
-
+        
         public static async ETTask<int> GetRealmKey(Scene zoneScene)
         {
             A2C_GetRealmKey a2CGetRealmKey = null;

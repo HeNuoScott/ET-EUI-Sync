@@ -47,8 +47,7 @@ namespace ET
                 case SceneType.LoginCenter:
                     scene.AddComponent<LoginInfoRecordComponent>();
                     break;
-                
-                
+
             }
 
             return scene;
