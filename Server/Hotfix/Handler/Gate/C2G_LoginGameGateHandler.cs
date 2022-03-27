@@ -63,7 +63,8 @@ namespace ET
 					SessionStateComponent =	session.AddComponent<SessionStateComponent>();
 				}
 				SessionStateComponent.State = SessionState.Normal;
-			
+
+				// 创建并记录player信息
 				Player player =  scene.GetComponent<PlayerComponent>().Get(request.Account);
 
 				if (player == null)

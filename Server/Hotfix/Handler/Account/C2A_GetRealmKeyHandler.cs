@@ -36,7 +36,8 @@ namespace ET
                 using (await CoroutineLockComponent.Instance.Wait(CoroutineLockType.LoginAccount, request.AccountId))
                 {
                     StartSceneConfig realmStartSceneConfig = RealmGateAddressHelper.GetRealm(request.ServerId);
-
+                    
+                    // 发消息给 网关负载均衡服务器  获取key
                     R2A_GetRealmKey r2AGetRealmKey =  (R2A_GetRealmKey) await MessageHelper.CallActor(realmStartSceneConfig.InstanceId, new A2R_GetRealmKey() { AccountId = request.AccountId });
 
                     if (r2AGetRealmKey.Error != ErrorCode.ERR_Success)

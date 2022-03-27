@@ -14,9 +14,8 @@ namespace ET
                 return;
             }
 
-
+            // 验证token
             string token = session.DomainScene().GetComponent<TokenComponent>().Get(request.AccountId);
-
             if (token == null || token != request.Token)
             {
                 response.Error = ErrorCode.ERR_TokenError;

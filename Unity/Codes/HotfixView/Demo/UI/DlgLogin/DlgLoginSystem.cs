@@ -35,14 +35,15 @@ namespace ET
 					return;
 				}
 
-
+				// 登录成功 向服务器查询 区服列表
 				errorCode = await LoginHelper.GetServerInfos(self.ZoneScene());
 				if (errorCode != ErrorCode.ERR_Success)
 				{
 					Log.Error(errorCode.ToString());
 					return;
 				}
-
+				
+				// 页面跳转
 				self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_Login);
 				self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_Server);
 			}

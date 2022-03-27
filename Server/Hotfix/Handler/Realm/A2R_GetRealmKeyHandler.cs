@@ -17,6 +17,7 @@ namespace ET
             string key = TimeHelper.ServerNow().ToString() +  RandomHelper.RandInt64().ToString();
             scene.GetComponent<TokenComponent>().Remove(request.AccountId);
             scene.GetComponent<TokenComponent>().Add(request.AccountId,key);
+            
             response.RealmKey = key.ToString();
             reply();
             await ETTask.CompletedTask;

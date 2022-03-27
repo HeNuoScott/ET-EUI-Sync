@@ -12,6 +12,7 @@ namespace ET
 			UnitComponent unitComponent = scene.GetComponent<UnitComponent>();
 			Unit unit = request.Unit;
 			
+			//?????? 为什么添加两次
 			unitComponent.AddChild(unit);
 			unitComponent.Add(unit);
 

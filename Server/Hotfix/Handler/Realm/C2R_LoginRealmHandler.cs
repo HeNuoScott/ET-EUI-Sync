@@ -22,7 +22,8 @@ namespace ET
                 return;
             }
 
-            string token = session.DomainScene().GetComponent<TokenComponent>().Get(request.AccountId);
+            // 验证token
+            string token = domainScene.GetComponent<TokenComponent>().Get(request.AccountId);
 
             if (token == null || token != request.RealmTokenKey)
             {
@@ -32,6 +33,7 @@ namespace ET
                 return;
             }
             
+            // 移除token
             domainScene.GetComponent<TokenComponent>().Remove(request.AccountId);
             
             

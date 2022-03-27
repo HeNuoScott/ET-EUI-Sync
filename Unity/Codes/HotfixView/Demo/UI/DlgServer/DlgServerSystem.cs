@@ -29,14 +29,15 @@ namespace ET
 		
 		public static void OnScrollItemRefreshHandler(this DlgServer self, Transform transform, int index)
 		{
+			// 为循环列表中的 item 绑定事件
 			Scroll_Item_serverTest serverTest = self.ScrollItemServerTests[index].BindTrans(transform);
 			ServerInfo info = self.ZoneScene().GetComponent<ServerInfosComponent>().ServerInfoList[index];
 			serverTest.E_SelectImage.color = info.Id == self.ZoneScene().GetComponent<ServerInfosComponent>().CurrentServerId? Color.red : Color.cyan;
 			serverTest.E_serverTestTipText.SetText(info.ServerName);
 			serverTest.E_SelectButton.AddListener(() => {  self.OnSelectServerItemHandler(info.Id);  });
-		
 		}
 
+		// 选择区服
 		public static void OnSelectServerItemHandler(this DlgServer self, long serverId)
 		{
 			self.ZoneScene().GetComponent<ServerInfosComponent>().CurrentServerId = int.Parse(serverId.ToString()) ;

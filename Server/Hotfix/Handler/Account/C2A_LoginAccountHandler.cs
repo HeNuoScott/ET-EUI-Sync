@@ -32,7 +32,11 @@ namespace ET
                 session.Disconnect().Coroutine();
                 return;
             }
-
+            Log.Info("请求账号登录");
+            Log.Info(request.AccountName);
+            Log.Info(request.Password);
+            
+            // 账号必须包含  大写字母 小写字母 数字0-9 长度在6-15位
             if (!Regex.IsMatch(request.AccountName.Trim(),@"^(?=.*[0-9].*)(?=.*[A-Z].*)(?=.*[a-z].*).{6,15}$"))
             {
                 // 名称要符合规则
@@ -50,7 +54,7 @@ namespace ET
                 session.Disconnect().Coroutine();
                 return;
             }
-
+            // 添加一个Session访问锁 防止多次反复请求
             using (session.AddComponent<SessionLockingComponent>())
             {
                 //CoroutineLockType.LoginAccount 携程锁
@@ -58,11 +62,11 @@ namespace ET
                 {
                     var accountInfoList = await DBManagerComponent.Instance.GetZoneDB(session.DomainZone()).Query<Account>(d=>d.AccountName.Equals(request.AccountName.Trim()));
                     Account account     = null;
-                    if (accountInfoList!=null && accountInfoList.Count > 0)
+                    if (accountInfoList != null && accountInfoList.Count > 0)
                     {
                         account = accountInfoList[0];
                         session.AddChild(account);
-                        if (account.AccountType == (int)AccountType.BlackList)
+                        if (account.AccountType == (int) AccountType.BlackList)
                         {
                             // 账号黑名单
                             response.Error = ErrorCode.ERR_AccountInBlackListError;
@@ -71,7 +75,7 @@ namespace ET
                             account?.Dispose();
                             return;
                         }
-                        
+
                         if (!account.Password.Equals(request.Password))
                         {
                             // 密码错误
@@ -84,17 +88,21 @@ namespace ET
                     }
                     else
                     {
+                        // 账号不存在  默认创建账号
                         // 正常登录  添加账号信息 并存入数据库
                         account             = session.AddChild<Account>();
                         account.AccountName = request.AccountName.Trim();
                         account.Password    = request.Password;
                         account.CreateTime  = TimeHelper.ServerNow();
                         account.AccountType = (int)AccountType.General;
+                        // 有多个DB管理器 找到Zone上挂载的DB管理器 保存账号
                         await DBManagerComponent.Instance.GetZoneDB(session.DomainZone()).Save<Account>(account);
                     }
-
+                    
+                    // 查找登录中心服 Id
                     StartSceneConfig startSceneConfig = StartSceneConfigCategory.Instance.GetBySceneName(session.DomainZone(), "LoginCenter");
                     long loginCenterInstanceId = startSceneConfig.InstanceId;
+                    
                     // 登录中心服 请求登录 查证是否在线  如果在线就踢玩家下线
                     var loginAccountResponse  = (L2A_LoginAccountResponse) await ActorMessageSenderComponent.Instance.Call(loginCenterInstanceId,new A2L_LoginAccountRequest(){AccountId = account.Id});
 

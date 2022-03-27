@@ -15,8 +15,11 @@ namespace ET
 
             try
             {
+                // 创建一个网络连接
                 accountSession  = zoneScene.GetComponent<NetKcpComponent>().Create(NetworkHelper.ToIPEndPoint(address));
+                // MD5 对密码进行加密
                 password        = MD5Helper.StringMD5(password);
+                // 调用call 方法  请求登录(账号服务器)
                 a2CLoginAccount = (A2C_LoginAccount) await accountSession.Call(new C2A_LoginAccount() { AccountName = account, Password = password });
             }
             catch (Exception e)
@@ -43,6 +46,11 @@ namespace ET
             return ErrorCode.ERR_Success;
         }
         
+        /// <summary>
+        /// 请求服务器  区服信息列表
+        /// </summary>
+        /// <param name="zoneScene"></param>
+        /// <returns></returns>
         public static async ETTask<int> GetServerInfos(Scene zoneScene)
         {
             A2C_GetServerInfos a2CGetServerInfos = null;
@@ -79,6 +87,7 @@ namespace ET
             return ErrorCode.ERR_Success;
         }
 
+        // 获取账号拥有的角色 列表
         public static async ETTask<int> GetRoles(Scene zoneScene)
         {
             A2C_GetRoles a2CGetRoles = null;
@@ -116,6 +125,7 @@ namespace ET
             return ErrorCode.ERR_Success;
         }
 
+        //创建角色
         public static async ETTask<int> CreateRole(Scene zoneScene, string name)
         {
             A2C_CreateRole a2CCreateRole = null;
@@ -150,6 +160,7 @@ namespace ET
             return ErrorCode.ERR_Success;
         }
         
+        // 删除角色
         public static async ETTask<int> DeleteRole(Scene zoneScene)
         {
             A2C_DeleteRole a2CDeleteRole = null;
@@ -185,6 +196,7 @@ namespace ET
             return ErrorCode.ERR_Success;
         }
         
+        // 请求网关负载均衡服务器信息
         public static async ETTask<int> GetRealmKey(Scene zoneScene)
         {
             A2C_GetRealmKey a2CGetRealmKey = null;
@@ -218,6 +230,7 @@ namespace ET
             return ErrorCode.ERR_Success;
         }
         
+        // 请求进入游戏
        public static async ETTask<int> EnterGame(Scene zoneScene)
         {
             string realmAddress = zoneScene.GetComponent<AccountInfoComponent>().RealmAddress;

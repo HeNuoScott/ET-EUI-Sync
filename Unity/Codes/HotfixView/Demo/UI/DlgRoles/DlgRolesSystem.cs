@@ -107,7 +107,7 @@ namespace ET
 
 			if (self.ZoneScene().GetComponent<RoleInfosComponent>().CurrentRoleId == 0)
 			{
-				Log.Error("请选择需要删除的角色");
+				Log.Error("请选择角色");
 				return;
 			}
 			
