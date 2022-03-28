@@ -25,7 +25,7 @@ namespace ET
 		public static void RefreshRoleItems(this DlgRoles self)
 		{
 			int count = self.ZoneScene().GetComponent<RoleInfosComponent>().RoleInfos.Count;
-			self.AddUIScrollItems(ref self.ScrollItemRoles,count);
+			self.AddUIScrollItems(ref self.ScrollItemRoles, count);
 			self.View.E_RolesLoopHorizontalScrollRect.SetVisible(true,count);
 		}
 		

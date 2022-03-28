@@ -22,40 +22,6 @@ namespace ET
      		}
      	}
 
-		public UnityEngine.UI.Button E_ConfirmButton
-     	{
-     		get
-     		{
-     			if (this.uiTransform == null)
-     			{
-     				Log.Error("uiTransform is null.");
-     				return null;
-     			}
-     			if( this.m_E_ConfirmButton == null )
-     			{
-		    		this.m_E_ConfirmButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"E_Confirm");
-     			}
-     			return this.m_E_ConfirmButton;
-     		}
-     	}
-
-		public UnityEngine.UI.Image E_ConfirmImage
-     	{
-     		get
-     		{
-     			if (this.uiTransform == null)
-     			{
-     				Log.Error("uiTransform is null.");
-     				return null;
-     			}
-     			if( this.m_E_ConfirmImage == null )
-     			{
-		    		this.m_E_ConfirmImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_Confirm");
-     			}
-     			return this.m_E_ConfirmImage;
-     		}
-     	}
-
 		public UnityEngine.UI.LoopHorizontalScrollRect E_RolesLoopHorizontalScrollRect
      	{
      		get
@@ -175,11 +141,43 @@ namespace ET
      		}
      	}
 
+		public UnityEngine.UI.Button E_ConfirmButton
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_ConfirmButton == null )
+     			{
+		    		this.m_E_ConfirmButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"E_Confirm");
+     			}
+     			return this.m_E_ConfirmButton;
+     		}
+     	}
+
+		public UnityEngine.UI.Image E_ConfirmImage
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_ConfirmImage == null )
+     			{
+		    		this.m_E_ConfirmImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_Confirm");
+     			}
+     			return this.m_E_ConfirmImage;
+     		}
+     	}
+
 		public void DestroyWidget()
 		{
 			this.m_EGBackGroundRectTransform = null;
-			this.m_E_ConfirmButton = null;
-			this.m_E_ConfirmImage = null;
 			this.m_E_RolesLoopHorizontalScrollRect = null;
 			this.m_E_CreateRoleButton = null;
 			this.m_E_CreateRoleImage = null;
@@ -187,12 +185,12 @@ namespace ET
 			this.m_E_DeleteRoleImage = null;
 			this.m_E_RoleNameInputField = null;
 			this.m_E_RoleNameImage = null;
+			this.m_E_ConfirmButton = null;
+			this.m_E_ConfirmImage = null;
 			this.uiTransform = null;
 		}
 
 		private UnityEngine.RectTransform m_EGBackGroundRectTransform = null;
-		private UnityEngine.UI.Button m_E_ConfirmButton = null;
-		private UnityEngine.UI.Image m_E_ConfirmImage = null;
 		private UnityEngine.UI.LoopHorizontalScrollRect m_E_RolesLoopHorizontalScrollRect = null;
 		private UnityEngine.UI.Button m_E_CreateRoleButton = null;
 		private UnityEngine.UI.Image m_E_CreateRoleImage = null;
@@ -200,6 +198,8 @@ namespace ET
 		private UnityEngine.UI.Image m_E_DeleteRoleImage = null;
 		private UnityEngine.UI.InputField m_E_RoleNameInputField = null;
 		private UnityEngine.UI.Image m_E_RoleNameImage = null;
+		private UnityEngine.UI.Button m_E_ConfirmButton = null;
+		private UnityEngine.UI.Image m_E_ConfirmImage = null;
 		public Transform uiTransform = null;
 	}
 }
