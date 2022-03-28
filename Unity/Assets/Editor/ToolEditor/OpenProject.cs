@@ -25,7 +25,10 @@ namespace ET
             const string tools = "./Tools";
             UnityEngine.Debug.LogError("暂时没有配置");
 #else
-            const string exePath = @"D:\Application\JetBrains Rider 2021.3.3\bin\rider64.exe";
+            // 家
+            //const string exePath = @"D:\Application\JetBrains Rider 2021.3.3\bin\rider64.exe";
+            // 公司
+            const string exePath = @"C:\Program Files\JetBrains\JetBrains Rider 2021.3.3\bin\rider64.exe";
             const string args = "..\\Client-Server.sln";
 #endif
             ProcessHelper.Run(exePath, args);
