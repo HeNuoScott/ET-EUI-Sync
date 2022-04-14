@@ -246,6 +246,7 @@ namespace ET
                                                     AccountId =  zoneScene.GetComponent<AccountInfoComponent>().AccountId,
                                                     RealmTokenKey = zoneScene.GetComponent<AccountInfoComponent>().RealmKey 
                                                 });
+                Game.EventSystem.PublishAsync(new EventType.LoginFinish() {ZoneScene = zoneScene}).Coroutine();
             }
             catch (Exception e)
             {

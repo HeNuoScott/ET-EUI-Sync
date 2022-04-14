@@ -99,6 +99,8 @@ public partial class UICodeSpawner
         strBuilder.AppendLine("namespace ET");
         strBuilder.AppendLine("{");
         
+        strBuilder.AppendFormat("\t[FriendClass(typeof({0}))]\r\n", strDlgName);
+       
         strBuilder.AppendFormat("\tpublic static  class {0}\r\n", strDlgName + "System");
           strBuilder.AppendLine("\t{");
           strBuilder.AppendLine("");
@@ -151,7 +153,8 @@ public partial class UICodeSpawner
         
         strBuilder.AppendLine("namespace ET");
         strBuilder.AppendLine("{");
-
+        strBuilder.AppendLine("\t[FriendClass(typeof(WindowCoreData))]");
+        strBuilder.AppendLine("\t[FriendClass(typeof(UIBaseWindow))]");
         strBuilder.AppendFormat("\t[AUIEvent(WindowID.WindowID_{0})]\n",strDlgName.Substring(3));
         strBuilder.AppendFormat("\tpublic  class {0}EventHandler : IAUIEventHandler\r\n", strDlgName);
           strBuilder.AppendLine("\t{");
